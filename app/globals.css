@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: #F8F4EA;
+  color: #101612;
+}
+
+::selection {
+  background: #C9952E;
+  color: #F8F4EA;
+}
+
+/* thin gold divider used across "How It Works" and section eyebrows */
+.gold-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #C9952E 20%,
+    #E7C76A 50%,
+    #C9952E 80%,
+    transparent
+  );
+  background-size: 200% 100%;
+}
+
+.eyebrow {
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #C9952E;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Focus visibility for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #C9952E;
+  outline-offset: 3px;
+}
+
+.arabesque-pattern {
+  background-image: radial-gradient(#C9952E 0.5px, transparent 0.5px);
+  background-size: 18px 18px;
+}
+
+.card-emerald {
+  background: linear-gradient(160deg, #0B4A36 0%, #063B2B 60%, #09251D 100%);
+}
