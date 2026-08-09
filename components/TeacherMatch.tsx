@@ -11,6 +11,7 @@ const COURSES = ["Quran Reading", "Tajweed", "Memorization", "Islamic Studies"];
 const LANGUAGES = ["English", "Urdu", "Arabic"];
 const LEVELS = ["Beginner", "Intermediate", "Advanced"];
 const SCHEDULES = ["Mornings", "Evenings", "Weekends"];
+const GENDERS = ["Male", "Female", "No Preference"];
 
 type Teacher = {
   name: string;
@@ -19,53 +20,81 @@ type Teacher = {
   reasons: string[];
 };
 
-function matchTeacher(course: string, age: string): Teacher {
-  if (course === "Memorization") {
-    return {
-      name: "Ustadh Bilal",
+function matchTeacher(course: string, age: string, gender: string): Teacher {
+  const male: Record<string, Teacher> = {
+    memorization: {
+      name: "Hafiz Ather",
       focus: "Hifz & Revision",
-      experience: "9+ Years Experience",
+      experience: "Quran Memorization Specialist",
       reasons: [
         "Specializes in structured memorization plans",
         "Experienced with steady, long-term revision",
         "Patient, one-to-one teaching style",
       ],
-    };
-  }
-  if (course === "Islamic Studies") {
-    return {
-      name: "Ustadh Hamza",
+    },
+    default: {
+      name: "Mahir",
+      focus: "Quran Reading & Tajweed",
+      experience: "Quran & Tajweed Teacher",
+      reasons: [
+        "Focused on fluent, confident recitation",
+        "Tajweed specialization",
+        "Flexible one-to-one scheduling",
+      ],
+    },
+  };
+
+  const female: Record<string, Teacher> = {
+    memorization: {
+      name: "Ustadha Kulsoom",
+      focus: "Hifz & Revision",
+      experience: "Quran Memorization Specialist",
+      reasons: [
+        "Specializes in structured memorization plans",
+        "Experienced with steady, long-term revision",
+        "Patient, one-to-one teaching style",
+      ],
+    },
+    islamic: {
+      name: "Ustadha Laiba",
       focus: "Islamic Studies & Seerah",
-      experience: "6+ Years Experience",
+      experience: "Islamic Studies Teacher",
       reasons: [
         "Strong grounding in Seerah and Fiqh basics",
         "Engaging teaching style for all ages",
         "One-to-one, discussion-based lessons",
       ],
-    };
-  }
-  if (age === "Child") {
-    return {
-      name: "Ustadha Ayesha",
+    },
+    default: {
+      name: "Ustadha Wareesha",
       focus: "Quran & Tajweed",
-      experience: "7+ Years Experience",
+      experience: "Quran & Tajweed Teacher",
       reasons: [
         "Experienced with beginners and young learners",
         "Tajweed specialization",
         "One-to-one teaching",
       ],
-    };
-  }
-  return {
-    name: "Ustadh Omar",
-    focus: "Quran Reading & Tajweed",
-    experience: "8+ Years Experience",
-    reasons: [
-      "Focused on fluent, confident recitation",
-      "Tajweed specialization",
-      "Flexible one-to-one scheduling",
-    ],
+    },
   };
+
+  const isFemale = gender === "Female";
+  const isMale = gender === "Male";
+
+  if (course === "Memorization") {
+    if (isMale) return male.memorization;
+    if (isFemale) return female.memorization;
+    return age === "Child" ? female.memorization : male.memorization;
+  }
+
+  if (course === "Islamic Studies") {
+    if (isMale) return male.default;
+    return female.islamic;
+  }
+
+  if (isMale) return male.default;
+  if (isFemale) return female.default;
+
+  return age === "Child" ? female.default : male.default;
 }
 
 function SelectRow({
@@ -103,19 +132,21 @@ function SelectRow({
 
 export default function TeacherMatch() {
   const [age, setAge] = useState<string | null>(null);
+  const [gender, setGender] = useState<string | null>(null);
   const [course, setCourse] = useState<string | null>(null);
   const [language, setLanguage] = useState<string | null>(null);
   const [level, setLevel] = useState<string | null>(null);
   const [schedule, setSchedule] = useState<string | null>(null);
 
-  const complete = age && course && language && level && schedule;
+  const complete = age && gender && course && language && level && schedule;
   const teacher = useMemo(
-    () => (complete ? matchTeacher(course!, age!) : null),
-    [complete, course, age]
+    () => (complete ? matchTeacher(course!, age!, gender!) : null),
+    [complete, course, age, gender]
   );
 
   function reset() {
     setAge(null);
+    setGender(null);
     setCourse(null);
     setLanguage(null);
     setLevel(null);
@@ -139,6 +170,7 @@ export default function TeacherMatch() {
         <div className="mx-auto mt-14 grid max-w-5xl gap-10 rounded-3xl border border-gold/15 bg-ivory/[0.03] p-6 md:grid-cols-2 md:p-10">
           <div className="flex flex-col gap-7">
             <SelectRow label="Age group" options={AGE_GROUPS} value={age} onChange={setAge} />
+            <SelectRow label="Preferred teacher gender" options={GENDERS} value={gender} onChange={setGender} />
             <SelectRow label="Course" options={COURSES} value={course} onChange={setCourse} />
             <SelectRow label="Preferred language" options={LANGUAGES} value={language} onChange={setLanguage} />
             <SelectRow label="Learning level" options={LEVELS} value={level} onChange={setLevel} />
