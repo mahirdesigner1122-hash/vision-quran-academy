@@ -1,8 +1,14 @@
 "use client";
 
 import { MessageCircle, ArrowRight } from "lucide-react";
+import { sendGAEvent } from "@next/third-parties/google";
 
-type Variant = "solid-gold" | "solid-ivory" | "outline-ivory" | "outline-gold" | "text";
+type Variant =
+  | "solid-gold"
+  | "solid-ivory"
+  | "outline-ivory"
+  | "outline-gold"
+  | "text";
 
 export default function WhatsAppButton({
   href,
@@ -34,6 +40,13 @@ export default function WhatsAppButton({
     text: "text-gold hover:text-gold-champagne underline-offset-4 hover:underline",
   };
 
+  const handleClick = () => {
+    sendGAEvent("event", "whatsapp_click", {
+      event_category: "engagement",
+      event_label: label,
+    });
+  };
+
   return (
     <a
       href={href}
@@ -41,10 +54,11 @@ export default function WhatsAppButton({
       rel="noopener noreferrer"
       aria-label={`${label} — opens WhatsApp`}
       className={`${base} ${styles[variant]} ${className}`}
+      onClick={handleClick}
     >
-      {showIcon && <MessageCircle size={18} strokeWidth={2} />}
+      {showIcon && <MessageCircle className="h-5 w-5" />}
       {label}
-      {showArrow && <ArrowRight size={16} />}
+      {showArrow && <ArrowRight className="h-4 w-4" />}
     </a>
   );
 }

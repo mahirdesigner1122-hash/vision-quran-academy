@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const display = Playfair_Display({
@@ -20,9 +21,12 @@ const siteUrl = "https://visionquranacademy.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+
   title: "Vision Quran Academy | Learn Quran Online With Tajweed",
+
   description:
     "Learn Quran online with experienced teachers through personalized one-to-one Quran, Tajweed, memorization and Islamic studies classes for students worldwide.",
+
   keywords: [
     "online Quran classes",
     "learn Quran online",
@@ -35,7 +39,11 @@ export const metadata: Metadata = {
     "Quran teacher for kids",
     "Quran lessons online",
   ],
-  alternates: { canonical: siteUrl },
+
+  alternates: {
+    canonical: siteUrl,
+  },
+
   openGraph: {
     title: "Vision Quran Academy | Learn Quran Online With Tajweed",
     description:
@@ -44,6 +52,7 @@ export const metadata: Metadata = {
     siteName: "Vision Quran Academy",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "Vision Quran Academy | Learn Quran Online With Tajweed",
@@ -58,9 +67,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <body className="font-body antialiased bg-ivory text-ink">
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable}`}
+    >
+      <body>
         {children}
+
+        <GoogleAnalytics gaId="G-Y3VRVYKV2K" />
       </body>
     </html>
   );
